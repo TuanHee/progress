@@ -6,8 +6,9 @@ use App\Models\Project;
 use App\Models\TaskList;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
+use Redirect;
 
-class TaskListContorller extends Controller
+class TaskListController extends Controller
 {
 
     public function store(Request $request, Project $project)
@@ -47,8 +48,12 @@ class TaskListContorller extends Controller
 
     public function destroy(TaskList $taskList)
     {
-        // $taskList;
+        if ($taskList->tasks()->count() > 0) {
+            return back()->with('warning', 'Cannot delete, task records.');
+        }
 
-        // return Response::json('success', 'Task list deleted.');
+        $taskList->delete();
+
+        return Redirect::back()->with('success', 'Task list deleted.');
     }
 }
