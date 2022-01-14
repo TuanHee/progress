@@ -7,7 +7,7 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ProjectMemberController;
 use App\Http\Controllers\TaskController;
-use App\Http\Controllers\TaskListContorller;
+use App\Http\Controllers\TaskListController;
 // use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 // use Inertia\Inertia;
@@ -59,7 +59,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::delete('/members/{member:invite_token}/deny', [ProjectMemberController::class, 'deny'])
         ->name('members.deny');
     // ------------------------------------------------------------------------- project task lists
-    Route::resource('projects.taskLists', TaskListContorller::class)
+    Route::resource('projects.taskLists', TaskListController::class)
         ->only(['store', 'update', 'destroy'])
         ->shallow();
     // ------------------------------------------------------------------------- task

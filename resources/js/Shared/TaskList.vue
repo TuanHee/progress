@@ -13,10 +13,9 @@
                         </DisclosureButton>
                         <div v-show="can" class="flex justify-end space-x-1 px-2">
                             <button @click="showEditTaskListModal" class="flex bg-gray-100 px-2 py-2 rounded-lg hover:bg-gray-200 focus:shadow-inner">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                                </svg>
+                                <PencilIcon class="h-4 w-4"/>
                             </button>
+
                             <jet-dialog-modal :show="editTaskList" @close="closeEditTaskListModal">
                                 <template #title>
                                     <h3 class="font-bold">Edit Task List</h3>
@@ -37,11 +36,31 @@
                                         :disabled="editTaskListForm.processing">Update</jet-button>
                                 </template>
                             </jet-dialog-modal>
-                            <button class="flex bg-gray-100 px-2 py-2 rounded-lg hover:bg-gray-200 focus:shadow-inner">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
-                                </svg>
-                            </button>
+
+                            <template v-if="list.tasks.length == 0">
+                                <button @click="showDeleteConfirm = true" class="flex bg-gray-100 px-2 py-2 rounded-lg hover:bg-gray-200 focus:shadow-inner">
+                                    <TrashIcon class="h-4 w-4" />
+                                </button>
+
+                                <confirm-dialog :show="showDeleteConfirm" :maxWidth="'xl'"
+                                    @close="showDeleteConfirm = false" :type="'danger'">
+
+                                    <template #title>Delete Task List</template>
+                                    <template #content>
+                                        Are you sure you want to delete the task list? This action cannot be undone.
+                                    </template>
+
+                                    <template #footer>
+                                        <div class="flex space-x-2 justify-end">
+                                            <jet-secondary-button @click="showDeleteConfirm = false">Cancel</jet-secondary-button>
+                                            <form @submit.prevent="deleteTaskList">
+                                                <jet-danger-button :type="'submit'">Delete</jet-danger-button>
+                                            </form>
+                                        </div>
+                                    </template>
+                                </confirm-dialog>
+                            </template>
+
                         </div>
                     </div>
                     <transition
@@ -53,8 +72,8 @@
                         leave-to-class="transform scale-95 opacity-0">
                         <DisclosurePanel class="mt-2 text-gray-600 bg-gray-50 rounded-b-lg shadow-inner">
                             <div class="flex justify-around w-full text-xs leading-7 text-left items-center border-b uppercase bg-gray-100 text-gray-400 font-semibold">
-                                <div class="pl-4 pr-2"></div>
-                                <div class="flex-grow border-r truncate text-center">Task</div>
+                                <div class="pl-5 pr-5"></div>
+                                <div class="flex-grow w-3/12 lg:w-auto border-r truncate text-center">Task</div>
                                 <div class="inline-flex border-r px-2 self-stretch">
                                     <div class="flex -space-x-1 items-center w-24 justify-center">Assigner</div>
                                 </div>
@@ -94,8 +113,11 @@
     import JetInputError from '@/Jetstream/InputError.vue'
     import JetButton from '@/Jetstream/Button.vue'
     import JetSecondaryButton from '@/Jetstream/SecondaryButton.vue'
+    import JetDangerButton from '@/Jetstream/DangerButton.vue'
     import Task from '@/Shared/Task.vue'
-    import { ChevronUpIcon, PlusSmIcon } from '@heroicons/vue/solid'
+    import { ChevronUpIcon, PlusSmIcon, TrashIcon } from '@heroicons/vue/solid'
+    import { PencilIcon } from '@heroicons/vue/outline'
+    import ConfirmDialog from '@/Shared/ConfirmDialog.vue'
 
     export default {
         components: {
@@ -109,9 +131,13 @@
             JetInputError,
             JetButton,
             JetSecondaryButton,
+            JetDangerButton,
             Task,
             ChevronUpIcon,
             PlusSmIcon,
+            TrashIcon,
+            PencilIcon,
+            ConfirmDialog,
         },
 
         props: {
@@ -126,7 +152,8 @@
                 editTaskListForm: {
                     title: this.list.title,
                     error: '',
-                }
+                },
+                showDeleteConfirm: false,
             }
         },
 
@@ -151,6 +178,11 @@
                     this.editTaskListForm.error = error.response.data.errors.title[0]
                     this.$refs.task_list_title.focus()
                 })
+            },
+
+            deleteTaskList() {
+                this.$inertia.delete(route('taskLists.destroy', { 'taskList': this.list.id }))
+                this.showDeleteConfirm = false
             },
 
             closeEditTaskListModal() {

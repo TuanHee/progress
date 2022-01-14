@@ -22,7 +22,8 @@
                     </div>
                     <div class="flex justify-end space-x-2">
                         <Link :href="notification.join_link" class="text-green-600 hover:underline rounded-sm">Join</Link>
-                        <Link :href="notification.deny_link" method="delete" class="text-red-600 px-2 hover:underline">Deny</Link>
+                        <Link :href="notification.deny_link" method="delete" as="button"
+                            type="button" class="text-red-600 px-2 hover:underline">Deny</Link>
                     </div>
                     <span class="text-xs text-gray-600">{{ notification.created_at }}</span>
                 </div>

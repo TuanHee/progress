@@ -7,9 +7,9 @@
         <div class="pl-4 pr-2">
             <jet-checkbox class="rounded-full" v-model:checked="task.completed" :disabled="!can" />
         </div>
-        <div class="flex-grow border-r cursor-pointer truncate flex justify-between">
-            <Link class="flex flex-auto justify-between items-center" :href="route('tasks.show', { task : task.id })">
-                <span>{{ task.title }}</span>
+        <div class="flex-grow w-3/12 lg:w-auto border-r cursor-pointer truncate flex justify-between">
+            <Link class="flex justify-between items-center truncate" :href="route('tasks.show', { task : task.id })">
+                <span class="truncate">{{ task.title }}</span>
                 <div class="flex items-center px-2" >
                     <div class="flex" v-if="task.comments_count > 0">
                         <span class="text-gray-400">
