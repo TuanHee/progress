@@ -30,7 +30,7 @@ class DashboardController extends Controller
                 ];
             });
 
-        $in_projects = Project::with('joinedMembers')->whereHas('joinedMembers', function($query) use ($member_ids) {
+        $in_projects = Project::with('joinedMembers')->whereHas('joinedMembers', function($query) {
                 return $query->where('user_id', Auth::id());
             })
             ->withCount('joinedMembers', 'tasks', 'tasksCompleted')
