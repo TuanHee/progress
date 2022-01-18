@@ -10,6 +10,9 @@
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white shadow-xl sm:rounded-lg">
                     <div class="flex justify-between items-center border-b px-6 pt-6 pb-4">
+                        <input type="text" placeholder="Search..." v-model="searchForm.search"
+                            class="border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm lg:w-3/12 md:w-4/12 w-6/12" />
+                        <button class="ml-2 text-gray-500 hover:text-black" @click="reset">Reset</button>
                         <jet-button class="ml-auto" @click="$inertia.get(route('projects.create'))">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
@@ -65,21 +68,52 @@
     import AppLayout from '@/Layouts/AppLayout.vue'
     import { Link } from '@inertiajs/inertia-vue3'
     import JetButton from '@/Jetstream/Button'
+    import JetSecondaryButton from '@/Jetstream/SecondaryButton.vue'
     import Pagination from '@/Shared/Pagination'
-    import ProfilePhoto from "@/Shared/ProfilePhoto.vue";
+    import ProfilePhoto from "@/Shared/ProfilePhoto.vue"
+    import { throttle, pickBy, mapValues } from 'lodash'
 
     export default {
         components: {
             AppLayout,
             Link,
             JetButton,
+            JetSecondaryButton,
             Pagination,
             ProfilePhoto,
         },
 
         props: {
+            filter: Object,
             projects: Object,
         },
 
+        data() {
+            return {
+                searchForm: {
+                    search: this.filter.search,
+                }
+            }
+        },
+
+        watch: {
+            searchForm: {
+                deep: true,
+                handler: throttle(function () {
+                    console.log(this.searchForm)
+                    this.$inertia.get(
+                        route('projects.index'),
+                        pickBy(this.searchForm),
+                        { preserveState: true },
+                    )
+                }, 150),
+            },
+        },
+
+        methods: {
+            reset() {
+                this.searchForm = mapValues(this.searchForm, () => null)
+            }
+        }
     }
 </script>

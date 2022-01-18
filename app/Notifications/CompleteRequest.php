@@ -9,6 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Log;
 
 class CompleteRequest extends Notification
 {
@@ -68,7 +69,7 @@ class CompleteRequest extends Notification
         ];
     }
 
-    public function toBroadCase($notifiable)
+    public function toBroadcast($notifiable)
     {
         $data = [
             'sender'    => [
@@ -79,6 +80,8 @@ class CompleteRequest extends Notification
             'created_at'=> now()->diffForHumans(),
             'link'      => route('tasks.show', ['task'  => $this->task->id]),
         ];
+
+        Log::debug($data);
         return (new BroadcastMessage($data));
     }
 }

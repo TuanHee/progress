@@ -63,5 +63,14 @@ class Project extends Model
     {
         return $this->hasManyThrough(Task::class, TaskList::class)->where('completed', true);
     }
+    // ------------------------------------------------------------------------- scope
+    public function scopeApplyFilters($query, array $filters)
+    {
+        $filters = collect($filters);
 
+        if ($filters->get('search')) {
+            $search = $filters->get('search');
+            $query->where('title', 'LIKE', '%'.$search.'%');
+        }
+    }
 }

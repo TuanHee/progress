@@ -7,6 +7,7 @@ use App\Models\ProjectMember;
 use App\Models\Task;
 use App\Models\TaskList;
 use App\Traits\GeneratesTokenTrait;
+use DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,7 +20,7 @@ class ProjectController extends Controller
 {
     use GeneratesTokenTrait;
 
-    public function index()
+    public function index(Request $request)
     {
         // DB::connection()->enableQueryLog();
         $projects = Project::with([
@@ -30,12 +31,16 @@ class ProjectController extends Controller
             ->orWhereHas('joinedMembers', function ($query) {
                 $query->where('user_id', Auth::id());
             })
+            ->applyFilters($request->only('search'))
             ->withCount('joinedMembers')
             ->paginate(10);
 
-            // $queries = \DB::getQueryLog();
-            // dd($queries);
-        return Inertia::render('Project/Index', ['projects' => $projects]);
+        // $queries = \DB::getQueryLog();
+        // dd($queries);
+        return Inertia::render('Project/Index', [
+            'filter'  => $request->all(),
+            'projects' => $projects,
+        ]);
     }
 
     public function create()
