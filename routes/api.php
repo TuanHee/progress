@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\ProjectController;
@@ -31,6 +30,9 @@ Route::middleware('auth:sanctum')->group(function() {
 
     // logout
     Route::post('/logout', [AuthController::class, 'logout']);
+
+    // ------------------------------------------------------------------------- dashboard
+    Route::get('/projects/recent', [ProjectController::class, 'recent']);
 
     // ------------------------------------------------------------------------- projects
     Route::apiResource('/projects', ProjectController::class);
