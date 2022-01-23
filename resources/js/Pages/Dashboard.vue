@@ -56,7 +56,7 @@
                                 </td>
                             </tr>
                             <tr v-if="in_tasks.length == 0">
-                                <td class="text-center px-2 leading-7 text-gray-500">Not task due soon</td>
+                                <td class="text-center px-2 leading-7 text-gray-500">There are no tasks assigned to you right now</td>
                             </tr>
                         </table>
                     </div>

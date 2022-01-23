@@ -3,62 +3,54 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\Project;
+use App\Models\TaskList;
 use Illuminate\Http\Request;
 
 class TaskListController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function store(Request $request, Project $project)
     {
-        //
+        $this->validate($request, [
+            'title' => 'required'
+        ]);
+
+        $title = $request->post('title');
+
+        $taskList = new TaskList([
+            'title'  => $title,
+        ]);
+
+        $project->taskLists()->save($taskList);
+
+        return response()->json([
+            'id'    => $taskList->id,
+            'title' => $taskList->title,
+            'tasks' => $taskList->tasks,
+        ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
-        //
+        $taskList = TaskList::find($id);
+
+        if ($taskList == null) {
+            return response()->json([
+                'message'   => 'Not Found',
+            ], 404);
+        }
+
+        if ($taskList->tasks->count() > 0) {
+            return response()->json(['warning' => 'Cannot delete, task records.'], 202);
+        }
+
+        $taskList->delete();
+
+        return response()->json(['success' => 'Task list deleted.']);
     }
 }

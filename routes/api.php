@@ -2,8 +2,10 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\API\DashboardController;
 use App\Http\Controllers\API\ProjectController;
 use App\Http\Controllers\API\TaskController;
+use App\Http\Controllers\API\TaskListController;
 use App\Http\Controllers\API\UserController;
 
 /*
@@ -20,7 +22,7 @@ use App\Http\Controllers\API\UserController;
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
 
-Route::middleware('auth:sanctum')->group(function() {
+Route::middleware('auth:sanctum')->group(function () {
     // ------------------------------------------------------------------------- user
     // get auth use data
     Route::get('/user', [UserController::class, 'user']);
@@ -32,10 +34,17 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::post('/logout', [AuthController::class, 'logout']);
 
     // ------------------------------------------------------------------------- dashboard
-    Route::get('/projects/recent', [ProjectController::class, 'recent']);
+    Route::get('/projects/recent', [DashboardController::class, 'recent']);
+    Route::get('tasks/assignedToMe', [DashboardController::class, 'assignedToMe']);
 
     // ------------------------------------------------------------------------- projects
-    Route::apiResource('/projects', ProjectController::class);
+    Route::get('/projects/{project}/author', [ProjectController::class, 'author']);
+    Route::get('/projects/{project}/members', [ProjectController::class, 'members']);
+    Route::apiResource('projects', ProjectController::class);
 
-    Route::apiResource('/tasks', TaskController::class)->except('index');
+    Route::apiResource('tasks', TaskController::class)->except('index');
+    // ------------------------------------------------------------------------- projects
+    Route::apiResource('projects.taskLists', TaskListController::class)
+        ->shallow()
+        ->except('index', 'show');
 });

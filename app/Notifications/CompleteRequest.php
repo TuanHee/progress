@@ -81,7 +81,7 @@ class CompleteRequest extends Notification
             'link'      => route('tasks.show', ['task'  => $this->task->id]),
         ];
 
-        Log::debug($data);
+        // Log::debug($data);
         return (new BroadcastMessage($data));
     }
 }
