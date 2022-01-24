@@ -16,7 +16,8 @@ class ProjectFactory extends Factory
     {
         $invite_link_status = $this->faker->boolean();
         return [
-            'user_id'   => rand(1, 2),
+            // 'user_id'   => rand(1, 2),
+            'user_id'   => 1,
             'title'     => $this->faker->text(20),
             'description'   => $this->faker->text(200),
             'invite_link_token' => $invite_link_status ? Str::random(32) : null,

@@ -15,7 +15,7 @@ class ProjectSeeder extends Seeder
      */
     public function run()
     {
-        Project::factory()->times(10)
+        Project::factory()->times(5)
             ->has(
                 ProjectMember::factory()
                     ->state(function (array $attributes, Project $project) {

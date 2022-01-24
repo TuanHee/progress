@@ -4,7 +4,6 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
@@ -31,6 +30,6 @@ class UserController extends Controller
             'password'  => Hash::make($credentials['password']),
         ]);
 
-        return $user;
+        return response()->json($user);
     }
 }

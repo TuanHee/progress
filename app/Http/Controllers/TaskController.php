@@ -65,7 +65,12 @@ class TaskController extends Controller
         $taskList->tasks()->save($task);
         $task->performers()->attach($request->input('members'));
 
-        $notify_users = ProjectMember::find($request->input('members'))->pluck('user');
+        // $notify_users = ProjectMember::find($request->input('members'))->pluck('user');
+        $notify_users = $task->performers()
+                            ->get()
+                            ->pluck('user')
+                            ->where('id', '<>', Auth::id())
+                            ->all();
 
         Notification::send($notify_users, new TaskAssigned($task));
 

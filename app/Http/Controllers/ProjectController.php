@@ -31,6 +31,7 @@ class ProjectController extends Controller
             ->orWhereHas('joinedMembers', function ($query) {
                 $query->where('user_id', Auth::id());
             })
+            ->orderBy('created_at', 'DESC')
             ->applyFilters($request->only('search'))
             ->withCount('joinedMembers')
             ->paginate(10);

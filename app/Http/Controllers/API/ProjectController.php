@@ -28,6 +28,7 @@ class ProjectController extends Controller
         ->orWhereHas('joinedMembers', function ($query) use ($request) {
             $query->where('user_id', $request->user()->id);
         })
+        ->orderBy('created_at', 'DESC')
         ->withCount('joinedMembers')
         ->get()
         ->map(function ($project) {
@@ -106,7 +107,7 @@ class ProjectController extends Controller
 
         $project->load('taskLists', 'taskLists.tasks');
 
-        return response()->json( $project);
+        return response()->json($project);
     }
 
     /**
