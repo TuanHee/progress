@@ -32,7 +32,20 @@ class TaskListController extends Controller
 
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request, [
+            'title' => 'required'
+        ]);
+
+        $taskList = TaskList::find($id);
+
+        if ($taskList != null) {
+            $taskList->title = $request->input('title');
+            $taskList->update();
+
+            return response()->json(['message'  => 'Task List updated']);
+        }
+
+        return response()->json(['message' =>'Not Found'], 404);
     }
 
     public function destroy($id)

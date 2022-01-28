@@ -96,11 +96,11 @@ class ProjectController extends Controller
         $project = Project::find($id);
 
         if($project == null) {
-            abort(404, 'Not Found');
+            return response()->json(['message' =>'Not Found'], 404);
         }
 
         if(! Gate::allows('view', [Project::class, $project])) {
-            abort(404, 'Not Found');
+            return response()->json(['message' =>'Not Found'], 404);
         }
 
         $project = Project::findOrFail($id);
@@ -122,29 +122,29 @@ class ProjectController extends Controller
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
-
     // ------------------------------------------------------------------------- other
-    public function author(Request $request, Project $project)
+    public function author(Request $request, $id)
     {
-        return response()->json([
-            'user'  => $project->user,
-        ]);
+        $project = Project::find($id);
+
+        if ($project != null) {
+            return response()->json([
+                'user'  => $project->user,
+            ]);
+        }
+
+        return response()->json(['message' =>'Not Found'], 404);
     }
 
-    public function members(Request $request, Project $project)
+    public function members(Request $request, $id)
     {
-        return response()->json([
-            'members'  => $project->members,
-        ]);
+        $project = Project::find($id);
+
+        if ($project != null) {
+            return response()->json([
+                'members'  => $project->members,
+            ]);
+        }
+        return response()->json(['message' =>'Not Found'], 404);
     }
 }
