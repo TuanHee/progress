@@ -8,7 +8,7 @@
 
         <div class="pt-4 py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white shadow-xl sm:rounded-lg">
+                <div class="bg-white shadow sm:rounded-lg">
                     <div class="flex justify-between items-center border-b px-6 pt-6 pb-4">
                         <input type="text" placeholder="Search..." v-model="searchForm.search"
                             class="border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm lg:w-3/12 md:w-4/12 w-6/12" />

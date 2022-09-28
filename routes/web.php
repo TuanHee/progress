@@ -42,12 +42,14 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         ->name('projects.updateInviteLinkStatus');
     Route::resource('projects', ProjectController::class)
         ->except('edit');
+
     // ------------------------------------------------------------------------- project members
     // ------------------------------------------------------------------------- mail
     Route::post('/projects/{project}/sendInviteMail', [ProjectMemberController::class, 'sendInviteMail'])
         ->name('projects.sendInviteMail');
     Route::get('/members/{member:invite_token}/invite', [ProjectMemberController::class, 'joinByMail'])
         ->name('members.joinByMail');
+
     // ------------------------------------------------------------------------- link
     Route::get('/projects/{project:invite_link_token}/invite', [ProjectMemberController::class, 'join'])
         ->name('project.invite-link');
@@ -55,21 +57,25 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         ->name('members.updatePermission');
     Route::delete('/projects/{project}/members/{member}/remove', [ProjectMemberController::class, 'remove'])
         ->name('members.remove');
+
     // ------------------------------------------------------------------------- deny
     Route::delete('/members/{member:invite_token}/deny', [ProjectMemberController::class, 'deny'])
         ->name('members.deny');
+
     // ------------------------------------------------------------------------- project task lists
     Route::resource('projects.taskLists', TaskListController::class)
         ->only(['store', 'update', 'destroy'])
         ->shallow();
+
     // ------------------------------------------------------------------------- task
-    Route::resource('taskLists.tasks', TaskController::class)
-        ->shallow()
-        ->except('index');
     Route::post('/tasks/{task}/updateStatus', [TaskController::class, 'updateStatus'])
         ->name('tasks.updateStatus');
     Route::post('/tasks/{task}/requestComplete', [TaskController::class, 'requestComplete'])
         ->name('tasks.requestComplete');
+    Route::resource('taskLists.tasks', TaskController::class)
+        ->shallow()
+        ->except('index');
+
     // ------------------------------------------------------------------------- comments
     Route::resource('tasks.comments', CommentController::class)
         ->only(['store', 'update', 'destroy'])

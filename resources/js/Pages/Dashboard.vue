@@ -41,7 +41,7 @@
                 <h3 class="mb-2 font-semibold">Assigned to me</h3>
 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                    <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
+                    <div class="bg-white overflow-hidden shadow sm:rounded-lg">
                         <h3 class="font-semibold px-4 pt-3 pb-2 border-b">Tasks</h3>
                         <table class="w-full">
                             <tr class="hover:bg-gray-100" v-for="task in in_tasks" :key="task.id">
