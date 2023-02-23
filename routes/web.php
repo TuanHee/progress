@@ -38,6 +38,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     // ------------------------------------------------------------------------- projects
     Route::get('/projects/{project}/overview', [ProjectController::class, 'overview'])
         ->name('projects.overview');
+    Route::post('/projects/registedEmailAddress', [ProjectController::class, 'registedEmailAddress'])
+        ->name('projects.registedEmailAddress');
     Route::post('/projects/{project}/updateInviteLinkStatus', [ProjectController::class, 'updateInviteLinkStatus'])
         ->name('projects.updateInviteLinkStatus');
     Route::resource('projects', ProjectController::class)

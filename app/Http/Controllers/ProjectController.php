@@ -6,6 +6,7 @@ use App\Models\Project;
 use App\Models\ProjectMember;
 use App\Models\Task;
 use App\Models\TaskList;
+use App\Models\User;
 use App\Traits\GeneratesTokenTrait;
 use DB;
 use Illuminate\Support\Facades\Gate;
@@ -192,6 +193,13 @@ class ProjectController extends Controller
                     ];
                 }),
         ]);
+    }
+
+    public function registedEmailAddress(Request $request)
+    {
+        return User::where('email', 'like', "%$request->keyword%")
+            ->where('email', '!=', Auth::user()->email)
+            ->get(['name', 'email']);
     }
 
     public function updateInviteLinkStatus(Request $request, Project $project)

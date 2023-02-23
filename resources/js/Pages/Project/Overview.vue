@@ -53,12 +53,25 @@
                                             </template>
                                             <template #content>
                                                 <form @submit.prevent="sendInviteMail">
-                                                    <div>
+                                                    <div class="relative">
                                                         <jet-label for="email" value="Invite Member" />
-                                                        <jet-input id="email" ref="email" type="email" class="mt-1 w-full" v-model="inviteMemberForm.email" placeholder="Email Address" required />
+                                                        <jet-input id="email" ref="email" type="email" class="mt-1 w-full"
+                                                            @keypress="showAutoCompletePopUp"
+                                                            v-model="inviteMemberForm.email" placeholder="Email Address" required />
+                                                        <div class="absolute bg-white w-full rounded-b-md shadow-md flex flex-col" v-if="emailAutoComplete.length">
+                                                            <div class="flex flex-row px-4 py-2 space-x-3 items-center cursor-pointer hover:bg-gray-200" v-for="{ name, email, profile_photo_url } in emailAutoComplete" :key="email"
+                                                                @click="chooseUser(email)">
+                                                                <profile-photo :src="profile_photo_url" :alt="name" />
+                                                                <div class="flex grow flex-col">
+                                                                    <span class="text-sm">{{ name }}</span>
+                                                                    <span class="text-gray-500 text-xs">{{ email }}</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                     <div class="mt-4">
-                                                        <text-area id="message" type="text" class="mt-1 w-full" :rows="4" v-model="inviteMemberForm.message" placeholder="Additional Message (Optional)" />
+                                                        <text-area id="message" type="text" class="mt-1 w-full" :rows="4"
+                                                            v-model="inviteMemberForm.message" placeholder="Additional Message (Optional)" />
                                                     </div>
                                                     <div class="my-4 flex justify-end">
                                                         <loading-button :loading="inviteMemberForm.processing">Send Invite</loading-button>
@@ -133,6 +146,7 @@
     import JetSecondaryButton from '@/Jetstream/SecondaryButton.vue'
     import TextArea from '@/Shared/TextArea.vue'
     import JetDialogModal from '@/Jetstream/DialogModal.vue'
+    import ProfilePhoto from '@/Shared/ProfilePhoto.vue'
     import ProjectMember from '@/Shared/ProjectMember.vue'
     import { Switch } from '@headlessui/vue'
     import { PlusSmIcon } from '@heroicons/vue/outline'
@@ -148,6 +162,7 @@
             JetSecondaryButton,
             TextArea,
             JetDialogModal,
+            ProfilePhoto,
             ProjectMember,
             Switch,
             PlusSmIcon,
@@ -169,6 +184,7 @@
                     email: null,
                     message: null,
                 }),
+                emailAutoComplete: [],
                 disabledCopyButton: false,
                 copyButtonText: 'copy link',
             }
@@ -183,10 +199,29 @@
 
             closeAddMemberModal() {
                 this.addMember = false
+                this.inviteMemberForm.email = null
+                this.inviteMemberForm.message = null
+                this.emailAutoComplete = []
             },
 
-            showAutoCompletePopUp() {
-                // t
+            async showAutoCompletePopUp() {
+                try {
+                    const { data } = await axios.post(
+                        route('projects.registedEmailAddress'),
+                        {
+                            keyword: this.inviteMemberForm.email,
+                        }
+                    )
+                    this.emailAutoComplete = data
+                    await _.delay(() => this.emailAutoComplete = [], 5000, 'later');
+                } catch (error) {
+                    console.log(error);
+                }
+            },
+
+            chooseUser(email) {
+                this.inviteMemberForm.email = email
+                this.emailAutoComplete = [];
             },
 
             sendInviteMail() {
