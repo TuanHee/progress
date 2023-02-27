@@ -1592,11 +1592,6 @@ select {
 	margin-top: calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));
 	margin-bottom: calc(1.5rem * var(--tw-space-y-reverse));
 }
-.-space-x-1 > :not([hidden]) ~ :not([hidden]) {
-	--tw-space-x-reverse: 0;
-	margin-right: calc(-0.25rem * var(--tw-space-x-reverse));
-	margin-left: calc(-0.25rem * calc(1 - var(--tw-space-x-reverse)));
-}
 .space-x-2 > :not([hidden]) ~ :not([hidden]) {
 	--tw-space-x-reverse: 0;
 	margin-right: calc(0.5rem * var(--tw-space-x-reverse));
@@ -1606,6 +1601,11 @@ select {
 	--tw-space-x-reverse: 0;
 	margin-right: calc(-1px * var(--tw-space-x-reverse));
 	margin-left: calc(-1px * calc(1 - var(--tw-space-x-reverse)));
+}
+.-space-x-1 > :not([hidden]) ~ :not([hidden]) {
+	--tw-space-x-reverse: 0;
+	margin-right: calc(-0.25rem * var(--tw-space-x-reverse));
+	margin-left: calc(-0.25rem * calc(1 - var(--tw-space-x-reverse)));
 }
 .space-x-1 > :not([hidden]) ~ :not([hidden]) {
 	--tw-space-x-reverse: 0;
@@ -1825,10 +1825,6 @@ select {
 	--tw-bg-opacity: 1;
 	background-color: rgba(29, 78, 216, var(--tw-bg-opacity));
 }
-.bg-purple-100 {
-	--tw-bg-opacity: 1;
-	background-color: rgba(237, 233, 254, var(--tw-bg-opacity));
-}
 .bg-red-200 {
 	--tw-bg-opacity: 1;
 	background-color: rgba(254, 202, 202, var(--tw-bg-opacity));
@@ -1860,6 +1856,10 @@ select {
 .bg-red-400 {
 	--tw-bg-opacity: 1;
 	background-color: rgba(248, 113, 113, var(--tw-bg-opacity));
+}
+.bg-purple-100 {
+	--tw-bg-opacity: 1;
+	background-color: rgba(237, 233, 254, var(--tw-bg-opacity));
 }
 .bg-green-200 {
 	--tw-bg-opacity: 1;
@@ -2000,14 +2000,11 @@ select {
 .pt-8 {
 	padding-top: 2rem;
 }
-.pb-2 {
-	padding-bottom: 0.5rem;
-}
-.pl-1 {
-	padding-left: 0.25rem;
-}
 .pt-3 {
 	padding-top: 0.75rem;
+}
+.pb-2 {
+	padding-bottom: 0.5rem;
 }
 .pl-4 {
 	padding-left: 1rem;
@@ -2029,6 +2026,9 @@ select {
 }
 .pb-12 {
 	padding-bottom: 3rem;
+}
+.pl-1 {
+	padding-left: 0.25rem;
 }
 .pb-20 {
 	padding-bottom: 5rem;
@@ -2183,10 +2183,6 @@ select {
 	--tw-text-opacity: 1;
 	color: rgba(29, 78, 216, var(--tw-text-opacity));
 }
-.text-purple-600 {
-	--tw-text-opacity: 1;
-	color: rgba(124, 58, 237, var(--tw-text-opacity));
-}
 .text-red-800 {
 	--tw-text-opacity: 1;
 	color: rgba(153, 27, 27, var(--tw-text-opacity));
@@ -2202,6 +2198,10 @@ select {
 .text-green-800 {
 	--tw-text-opacity: 1;
 	color: rgba(6, 95, 70, var(--tw-text-opacity));
+}
+.text-purple-600 {
+	--tw-text-opacity: 1;
+	color: rgba(124, 58, 237, var(--tw-text-opacity));
 }
 .text-yellow-800 {
 	--tw-text-opacity: 1;

@@ -29,6 +29,7 @@
     },
     "dependencies": {
         "@headlessui/vue": "^1.4.1",
-        "@heroicons/vue": "^1.0.4"
+        "@heroicons/vue": "^1.0.4",
+        "chart.js": "^4.2.1"
     }
 }
