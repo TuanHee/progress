@@ -8,9 +8,9 @@ use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ProjectMemberController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\TaskListController;
-// use Illuminate\Foundation\Application;
+use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
-// use Inertia\Inertia;
+use Inertia\Inertia;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,22 +23,29 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::get('/welcome', function () {
-//     return Inertia::render('Welcome', [
-//         'canLogin' => Route::has('login'),
-//         'canRegister' => Route::has('register'),
-//         'laravelVersion' => Application::VERSION,
-//         'phpVersion' => PHP_VERSION,
-//     ]);
-// });
+Route::get('/', function () {
+    if (Auth::check()) {
+        return Redirect::route('dashboard');
+    }
+    return Redirect::route('home');
+});
+
+Route::get('/home', function () {
+    return Inertia::render('Welcome', [
+        'canLogin' => Route::has('login'),
+        'canRegister' => Route::has('register'),
+        'laravelVersion' => Application::VERSION,
+        'phpVersion' => PHP_VERSION,
+    ]);
+})->name('home');
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
-    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // ------------------------------------------------------------------------- projects
     Route::get('/projects/{project}/overview', [ProjectController::class, 'overview'])
         ->name('projects.overview');
-    Route::post('/projects/registedEmailAddress', [ProjectController::class, 'registedEmailAddress'])
+    Route::post('/projects/{project}/registedEmailAddress', [ProjectController::class, 'registedEmailAddress'])
         ->name('projects.registedEmailAddress');
     Route::post('/projects/{project}/updateInviteLinkStatus', [ProjectController::class, 'updateInviteLinkStatus'])
         ->name('projects.updateInviteLinkStatus');

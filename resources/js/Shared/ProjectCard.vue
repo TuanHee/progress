@@ -50,11 +50,9 @@
 
 
             const data = this.project.tasks_count != 0 ? [
-                { type: 'completed', count: this.project.tasks_completed_count },
-                { type: 'incompleted', count: this.project.tasks_count - this.project.tasks_completed_count },
-            ] : [
-                { type: 'Empty', count: 1 },
-            ]
+                { type: 'Done', count: this.project.tasks_completed_count },
+                { type: 'Undone', count: this.project.tasks_count - this.project.tasks_completed_count },
+            ] : []
 
             const backgroundColors = this.project.tasks_count != 0 ? [
                 'rgb(0, 0, 132)',

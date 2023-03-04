@@ -57,7 +57,8 @@
                                                         <jet-label for="email" value="Invite Member" />
                                                         <jet-input id="email" ref="email" type="email" class="mt-1 w-full"
                                                             @keypress="showAutoCompletePopUp"
-                                                            v-model="inviteMemberForm.email" placeholder="Email Address" required />
+                                                            v-model="inviteMemberForm.email" placeholder="Email Address"
+                                                            autocomplete="off" required />
                                                         <div class="absolute bg-white w-full rounded-b-md shadow-md flex flex-col" v-if="emailAutoComplete.length">
                                                             <div class="flex flex-row px-4 py-2 space-x-3 items-center cursor-pointer hover:bg-gray-200" v-for="{ name, email, profile_photo_url } in emailAutoComplete" :key="email"
                                                                 @click="chooseUser(email)">
@@ -207,7 +208,7 @@
             async showAutoCompletePopUp() {
                 try {
                     const { data } = await axios.post(
-                        route('projects.registedEmailAddress'),
+                        route('projects.registedEmailAddress', {'project': this.project}),
                         {
                             keyword: this.inviteMemberForm.email,
                         }

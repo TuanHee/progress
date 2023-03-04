@@ -195,10 +195,14 @@ class ProjectController extends Controller
         ]);
     }
 
-    public function registedEmailAddress(Request $request)
+    public function registedEmailAddress(Request $request, Project $project)
     {
+        $members_in_project = ProjectMember::where('project_id', $project->id)
+                                ->pluck('user_id');
+
         return User::where('email', 'like', "%$request->keyword%")
             ->where('email', '!=', Auth::user()->email)
+            ->whereNotIn('id', $members_in_project)
             ->get(['name', 'email']);
     }
 
