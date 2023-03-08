@@ -34,7 +34,7 @@ class ProjectController extends Controller
             })
             ->orderBy('created_at', 'DESC')
             ->applyFilters($request->only('search'))
-            ->withCount('joinedMembers')
+            ->withCount('joinedMembers', 'tasks', 'tasksCompleted')
             ->paginate(10);
 
         // $queries = \DB::getQueryLog();

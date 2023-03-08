@@ -30,6 +30,7 @@
     "dependencies": {
         "@headlessui/vue": "^1.4.1",
         "@heroicons/vue": "^1.0.4",
-        "chart.js": "^4.2.1"
+        "apexcharts": "^3.37.1",
+        "vue3-apexcharts": "^1.4.1"
     }
 }

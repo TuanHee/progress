@@ -1,5 +1,6 @@
 <template>
     <Link :href="route('projects.show', { project : project.id })" class="card min-h-full">
+        <progress-bar :percent="progress" />
         <div class="pb-2 flex justify-between">
             <div class="flex flex-col space-y-1">
                 <h5 class="font-semibold">{{ project.title }}</h5>
@@ -19,9 +20,6 @@
                     </div>
                 </div>
             </div>
-            <div>
-                <canvas :id="'chart-'+ project.id" class="w-1/2"></canvas>
-            </div>
         </div>
         <div class="text-right text-xs text-gray-600">{{ project.created_at }}</div>
     </Link>
@@ -29,15 +27,15 @@
 
 <script>
     import { Link } from '@inertiajs/inertia-vue3'
-    import Chart from 'chart.js/auto'
     import ProfilePhoto from '@/Shared/ProfilePhoto.vue'
+    import ProgressBar from '@/Shared/ProgressBar.vue'
     import { CheckCircleIcon } from '@heroicons/vue/outline'
 
     export default {
         components: {
             Link,
-            Chart,
             ProfilePhoto,
+            ProgressBar,
             CheckCircleIcon,
         },
 
@@ -45,41 +43,12 @@
             project: Object,
         },
 
-        mounted() {
-            const ctx = document.getElementById('chart-'+ this.project.id)
-
-
-            const data = this.project.tasks_count != 0 ? [
-                { type: 'Done', count: this.project.tasks_completed_count },
-                { type: 'Undone', count: this.project.tasks_count - this.project.tasks_completed_count },
-            ] : []
-
-            const backgroundColors = this.project.tasks_count != 0 ? [
-                'rgb(0, 0, 132)',
-                'rgb(205, 205, 205)',
-            ] : [
-                'rgb(205, 205, 205)',
-            ]
-
-            new Chart(ctx, {
-                type: 'doughnut',
-                options: {
-                    plugins: {
-                        legend: {
-                            display: false
-                        },
-                    }
-                },
-                data: {
-                    labels: data.map(row => row.type),
-                    datasets: [
-                        {
-                            data: data.map(row => row.count),
-                            backgroundColor: backgroundColors
-                        }
-                    ]
-                }
-            });
-        }
+        data() {
+            return {
+                progress: this.project.tasks_count
+                    ? Math.ceil(this.project.tasks_completed_count / this.project.tasks_count * 100) +'%'
+                    : 0 + '%',
+            }
+        },
     }
 </script>

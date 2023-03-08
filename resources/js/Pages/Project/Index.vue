@@ -25,7 +25,7 @@
                             <tr class="text-left font-bold">
                                 <th class="px-6 pt-6 pb-4">Title</th>
                                 <th class="px-6 pt-6 pb-4">Member</th>
-                                <th class="px-6 pt-6 pb-4">Created Date</th>
+                                <th class="px-6 pt-6 pb-4">Status</th>
                             </tr>
                             <tr v-for="project in projects.data" :key="project.id" class="hover:bg-gray-100 focus-within:bg-gray-100">
                                 <td class="border-t">
@@ -47,7 +47,16 @@
                                     </Link>
                                 </td>
                                 <td class="border-t">
-                                    <Link class="px-6 py-2 flex items-center" :href="route('projects.show', project)">{{ project.created_at }}</Link>
+                                    <Link class="px-6 py-2 flex items-center"
+                                        :href="route('projects.show', project)">
+                                        <div class="w-full">
+                                            <progress-bar :percent="Math.ceil((
+                                                project.tasks_count
+                                                ? project.tasks_completed_count / project.tasks_count
+                                                : 0
+                                            ) * 100) + '%'" />
+                                        </div>
+                                    </Link>
                                 </td>
                             </tr>
                             <tr v-if="projects.data.length === 0">
@@ -71,6 +80,7 @@
     import JetSecondaryButton from '@/Jetstream/SecondaryButton.vue'
     import Pagination from '@/Shared/Pagination'
     import ProfilePhoto from "@/Shared/ProfilePhoto.vue"
+    import ProgressBar from '@/Shared/ProgressBar.vue'
     import { throttle, pickBy, mapValues } from 'lodash'
 
     export default {
@@ -81,6 +91,7 @@
             JetSecondaryButton,
             Pagination,
             ProfilePhoto,
+            ProgressBar,
         },
 
         props: {
