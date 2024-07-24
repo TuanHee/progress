@@ -17,7 +17,11 @@ class AttachmentController extends Controller
                 'nullable',
                 'url',
             ],
-            // 'attachment' =>
+            'attachment' => [
+                'nullable',
+                'file',
+                'mimes:jpeg,png,jpg,gif,bmp,tiff,webp,doc,docx,pdf,xls,xlsx,ppt,pptx,txt,csv,rtf,odt,ods,odp,odg,zip,rar,7z'
+            ],
         ]);
 
         $link = $request->input('link') ?? null;
